@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Recipe Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 50%;
+            margin: 0 auto;
+            text-align: center;
+        }
+        select, input {
+            padding: 10px;
+            margin: 10px;
+            width: 200px;
+        }
+        table {
+            margin: 20px auto;
+            width: 80%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+    </style>
+    <script>
+        const data = {
+            "Garlic Aioli": {
+                baseQuantity: 240,
+                ingredients: {
+                    "Mayo": 246,
+                    "Peeled Garlic": 23,
+                    "Dijon Mustard": 20
+                }
+            },
+            "Olive Tapenade": {
+                baseQuantity: 190,
+                ingredients: {
+                    "Green Olive": 49,
+                    "Black olive": 49,
+                    "Capers": 10,
+                    "Sundried Tomato": 50,
+                    "Parsley": 10,
+                    "Olive Oil": 30,
+                    "Peeled Garlic": 10
+                }
+            },
+            "Sumac Onion": {
+                baseQuantity: 130,
+                ingredients: {
+                    "Onion": 179,
+                    "Lemon Yellow": 50,
+                    "Sumac Powder": 13,
+                    "Salt": 4,
+                    "Olive oil": 13
+                }
+            },
+            "Baba Ganoush": {
+                baseQuantity: 220,
+                ingredients: {
+                    "Brinjal Raw": 629,
+                    "Pomegranate": 50,
+                    "Peeled Garlic": 10,
+                    "Tahini": 7,
+                    "Olive Oil": 10,
+                    "Yellow Lemon": 25,
+                    "Salt": 5,
+                    "Jeera": 4
+                }
+            },
+            "Harissa": {
+                baseQuantity: 323,
+                ingredients: {
+                    "Bell Red": 359,
+                    "Tomato": 220,
+                    "Onion": 75,
+                    "Salt": 4,
+                    "Honey": 7,
+                    "Paste Chilli": 20,
+                    "Peeled Garlic": 20,
+                    "Lemon Yellow": 15,
+                    "Jeera Powder": 5,
+                    "Dhaniya Powder": 5
+                }
+            },
+            "Muhammara": {
+                baseQuantity: 306,
+                ingredients: {
+                    "Bell Red": 331,
+                    "Tomato": 174,
+                    "Onion": 74,
+                    "Jeera Powder": 8,
+                    "Salt": 5,
+                    "Honey": 12,
+                    "Peeled Garlic": 15,
+                    "Walnut": 25,
+                    "Chilli Powder (Spicy)": 2
+                }
+            },
+            "Fattoush Salad": {
+                baseQuantity: 351,
+                ingredients: {
+                    "Cucumber": 125,
+                    "Tomato": 98,
+                    "Green Chilli": 60,
+                    "Onion": 110,
+                    "Bell Yellow": 54,
+                    "Bell Red": 67,
+                    "Iceberg": 80,
+                    "Parsley": 30,
+                    "Olive oil": 12,
+                    "Lemon": 40,
+                    "Pepper": 3,
+                    "Salt": 3
+                }
+            },
+            "Hummus": {
+                baseQuantity: 400,
+                ingredients: {
+                    "Lemon Yellow": 100,
+                    "Chickpeas (double dollar)": 352,
+                    "Tahini": 13,
+                    "Peeled Garlic": 27,
+                    "Olive Oil": 20,
+                    "Jeera Powder": 5,
+                    "Salt": 5
+                }
+            },
+            "Pickled Veggies": {
+                baseQuantity: 189,
+                ingredients: {
+                    "Radish": 50,
+                    "Cucumber": 70,
+                    "Carrot": 72,
+                    "Green Chilli": 10,
+                    "Red Bell": 150
+                }
+            },
+            "Shawarma Chicken Masala": {
+                baseQuantity: 510,
+                ingredients: {
+                    "Cabbage": 110,
+                    "Dhaniya": 20,
+                    "Marinated and Not Cooked Chicken": 200,
+                    "Green Chilli": 10,
+                    "Onion": 141,
+                    "Tomatoes": 135,
+                    "Mayo": 50,
+                    "Salt": 5
+                }
+            },
+            "Shawarma Paneer Masala": {
+                baseQuantity: 490,
+                ingredients: {
+                    "Cabbage": 110,
+                    "Dhaniya": 20,
+                    "Marinated and Cooked Paneer (not cooked)": 180,
+                    "Green Chilli": 10,
+                    "Onion": 141,
+                    "Tomatoes": 135,
+                    "Mayo Wingreens": 50,
+                    "Salt": 5
+                }
+            },
+            "Classic Falafel Shawarma": {
+                baseQuantity: 1,
+                ingredients: {
+                    "Olive Oil": 5,
+                    "Hummus": 25,
+                    "Muhammara": 40,
+                    "Falafel": 55,
+                    "Iceberg Lettuce": 10,
+                    "Sumac Onion": 20,
+                    "Garlic Aioli": 20,
+                    "Fattoush Salad": 20,
+                    "Pita Bread": 1
+                }
+            },
+            "Classic Chicken Shawarma": {
+                baseQuantity: 1,
+                ingredients: {
+                    "Olive Oil": 6,
+                    "Hummus": 25,
+                    "Muhammara": 40,
+                    "Shawarma Chicken Masala": 80,
+                    "Iceberg Lettuce": 20,
+                    "Sumac Onion": 20,
+                    "Garlic Aioli": 20,
+                    "Pita Bread": 1
+                }
+            },
+            "Harissa Chicken Shawarma": {
+                baseQuantity: 1,
+                ingredients: {
+                    "Olive Oil": 5,
+                    "Hummus": 25,
+                    "Harissa": 40,
+                    "Shawarma Chicken Masala": 80,
+                    "Iceberg Lettuce": 20,
+                    "Sumac Onion": 20,
+                    "Garlic Aioli": 20,
+                    "Pita Bread": 1
+                }
+            },
+            "Regular Chicken Shawarma": {
+                baseQuantity: 1,
+                ingredients: {
+                    "Shawarma Chicken Masala": 90,
+                    "Mayo": 20,
+                    "Pita Bread": 1
+                }
+            },
+            "Pita Pocket Chicken": {
+                baseQuantity: 1,
+                ingredients: {
+                    "Olive Oil": 10,
+                    "Zaatar": 8,
+                    "Hummus": 40,
+                    "Muhammara": 30,
+                    "Olive Tapenade": 50,
+                    "Shawarma Chicken Masala": 80,
+                    "Fattoush Salad": 80,
+                    "Sumac Onion": 10,
+                    "Green Lettuce": 20,
+                    "Pickled Paprika": 10,
+                    "Frozen Pita": 1
+                }
+            },
+            "Pita Pocket Paneer": {
+                baseQuantity: 1,
+                ingredients: {
+                    "Olive Oil": 10,
+                    "Zaatar": 8,
+                    "Hummus": 40,
+                    "Muhammara": 30,
+                    "Olive Tapenade": 50,
+                    "Shawarma Paneer Masala": 80,
+                    "Fattoush Salad": 80,
+                    "Sumac Onion": 10,
+                    "Green Lettuce": 20,
+                    "Pickled Paprika": 10,
+                    "Frozen Pita": 1
+                }
+            },
+            "Pita Pocket Falafel": {
+                baseQuantity: 1,
+                ingredients: {
+                    "Olive Oil": 10,
+                    "Zaatar": 8,
+                    "Hummus": 40,
+                    "Muhammara": 30,
+                    "Olive Tapenade": 50,
+                    "Falafel": 80,
+                    "Fattoush Salad": 80,
+                    "Sumac Onion": 10,
+                    "Green Lettuce": 20,
+                    "Pickled Paprika": 10,
+                    "Frozen Pita": 1
+                }
+            },
+            "Regular Paneer Shawarma": {
+                baseQuantity: 1,
+                ingredients: {
+                    "Shawarma Paneer Masala": 90,
+                    "Mayo": 20,
+                    "Pita Bread": 1
+                }
+            },
+            "Classic Paneer Shawarma": {
+                baseQuantity: 1,
+                ingredients: {
+                    "Olive Oil": 6,
+                    "Hummus": 25,
+                    "Muhammara": 40,
+                    "Shawarma Paneer Masala": 80,
+                    "Iceberg Lettuce": 20,
+                    "Sumac Onion": 20,
+                    "Garlic Aioli": 20,
+                    "Pita Bread": 1
+                }
+            },
+            "Harissa Paneer Shawarma": {
+                baseQuantity: 1,
+                ingredients: {
+                    "Olive Oil": 5,
+                    "Hummus": 25,
+                    "Harissa": 40,
+                    "Shawarma Paneer Masala": 80,
+                    "Iceberg Lettuce": 20,
+                    "Sumac Onion": 20,
+                    "Garlic Aioli": 20,
+                    "Pita Bread": 1
+                }
+            },
+            "Chicken Shawarma Marinate": {
+                baseQuantity: 1800,
+                ingredients: {
+                    "Chicken": 1500,
+                    "Ginger": 25,
+                    "Garlic": 25,
+                    "Green Chilli": 10,
+                    "Salt": 10,
+                    "Vinegar": 15,
+                    "Dahi": 200,
+                    "Shawarma Masala": 200
+                }
+            }
+        };
+
+        function calculate() {
+            const item = document.getElementById("item").value;
+            const quantity = document.getElementById("quantity").value;
+            const baseQuantity = data[item].baseQuantity;
+            const ingredients = data[item].ingredients;
+            const tableBody = document.getElementById("ingredientsTableBody");
+            tableBody.innerHTML = "";
+
+            for (const ingredient in ingredients) {
+                const requiredQuantity = (ingredients[ingredient] / baseQuantity) * quantity;
+                const row = `<tr><td>${ingredient}</td><td>${requiredQuantity.toFixed(2)}</td></tr>`;
+                tableBody.innerHTML += row;
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Recipe Calculator</h1>
+        <form onsubmit="event.preventDefault(); calculate();">
+            <select id="item" required>
+                <option value="" disabled selected>Select Item</option>
+                <option value="Garlic Aioli">Garlic Aioli</option>
+                <option value="Olive Tapenade">Olive Tapenade</option>
+                <option value="Sumac Onion">Sumac Onion</option>
+                <option value="Baba Ganoush">Baba Ganoush</option>
+                <option value="Harissa">Harissa</option>
+                <option value="Muhammara">Muhammara</option>
+                <option value="Fattoush Salad">Fattoush Salad</option>
+                <option value="Hummus">Hummus</option>
+                <option value="Pickled Veggies">Pickled Veggies</option>
+                <option value="Shawarma Chicken Masala">Shawarma Chicken Masala</option>
+                <option value="Shawarma Paneer Masala">Shawarma Paneer Masala</option>
+                <option value="Classic Falafel Shawarma">Classic Falafel Shawarma</option>
+                <option value="Classic Chicken Shawarma">Classic Chicken Shawarma</option>
+                <option value="Harissa Chicken Shawarma">Harissa Chicken Shawarma</option>
+                <option value="Regular Chicken Shawarma">Regular Chicken Shawarma</option>
+                <option value="Pita Pocket Chicken">Pita Pocket Chicken</option>
+                <option value="Pita Pocket Paneer">Pita Pocket Paneer</option>
+                <option value="Pita Pocket Falafel">Pita Pocket Falafel</option>
+                <option value="Regular Paneer Shawarma">Regular Paneer Shawarma</option>
+                <option value="Classic Paneer Shawarma">Classic Paneer Shawarma</option>
+                <option value="Harissa Paneer Shawarma">Harissa Paneer Shawarma</option>
+                <option value="Chicken Shawarma Marinate">Chicken Shawarma Marinate</option>
+            </select>
+            <input type="number" id="quantity" placeholder="Enter Quantity (g)" required>
+            <button type="submit">Calculate</button>
+        </form>
+        <table>
+            <thead>
+                <tr>
+                    <th>Ingredient</th>
+                    <th>Required Quantity (g)</th>
+                </tr>
+            </thead>
+            <tbody id="ingredientsTableBody"></tbody>
+        </table>
+    </div>
+</body>
+</html>
